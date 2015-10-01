@@ -1,0 +1,33 @@
+---
+
+web:
+  build: applications/client
+  command: ember server
+  ports:
+    - '4200:4200'
+    - '49152:49152'
+  volumes:
+    - "./applications/client:/app"
+
+api:
+  build: applications/api
+  command:  mix phoenix.server
+  ports:
+    - '4000:4000'
+    - '35729:35729'
+  links:
+    - mail
+    - db
+  volumes:
+    - "./applications/api:/app"
+
+db:
+  image: postgres:9.1
+  ports:
+    - '5432:5432'
+    
+mail:
+   image: zolweb/docker-mailcatcher
+   ports:
+     - "1080:1080"
+     - "1025:1025"
